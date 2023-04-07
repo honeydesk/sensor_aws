@@ -3,12 +3,14 @@ from sensor.exception import SensorException
 from sensor.logger import logging
 from datetime import datetime
 
+
 FILE_NAME = "sensor.csv"
 TRAIN_FILE_NAME = "train.csv"
 TEST_FILE_NAME = "test.csv"
 TRANSFORMER_OBJECT_FILE_NAME = "transformer.pkl"
 TARGET_ENCODER_OBJECT_FILE_NAME = "target_encoder.pkl"
 MODEL_FILE_NAME = "model.pkl"
+
 
 class TrainingPipelineConfig:
 
@@ -78,3 +80,16 @@ class ModelPusherConfig:
         self.pusher_model_path = os.path.join(self.pusher_model_dir,MODEL_FILE_NAME)
         self.pusher_transformer_path = os.path.join(self.pusher_model_dir,TRANSFORMER_OBJECT_FILE_NAME)
         self.pusher_target_encoder_path = os.path.join(self.pusher_model_dir,TARGET_ENCODER_OBJECT_FILE_NAME)
+
+
+class BatchPredictionConfig:
+    def __init__(self):
+        try:
+            self.inbox_dir = os.path.join("data","inbox")
+            self.outbox_dir = os.path.join("data","outbox")
+            self.archive_dir = os.path.join("data","archive")
+            os.makedirs(self.inbox_dir ,exist_ok=True)
+            os.makedirs(self.outbox_dir ,exist_ok=True)
+            os.makedirs(self.archive_dir,exist_ok=True)
+        except Exception as e:
+            raise SensorException(e, sys)

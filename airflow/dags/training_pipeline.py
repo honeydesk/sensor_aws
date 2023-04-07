@@ -25,6 +25,8 @@ from __future__ import annotations
 from sensor.entity.config_entity import TrainingPipelineConfig
 from sensor.pipeline.training_pipeline import TrainingPipeline
 
+import os
+
 # [START tutorial]
 # [START import_module]
 import json
@@ -121,6 +123,12 @@ with DAG(
             model_trainer_artifact=model_trainer_artifact)
         ti.xcom_push("model_pusher_artifact",model_pusher_artifact.__dict__)
         
+    def push_data_to_s3(**kwargs):
+        bucket_name = os.getenv("BUCKET_NAME")
+        artifact_folder = "/app/artifact"
+        saved_models = "/app/saved_models"
+        os.system(f"aws s3 sync {artifact_folder} s3://{bucket_name}/artifact")
+        os.system(f"aws s3 sync {saved_models} s3://{bucket_name}/saved_models")
         
     data_ingestion_task = PythonOperator(
         task_id="data_ingestion",
@@ -189,8 +197,12 @@ with DAG(
     """
     )
     
-   
-    data_ingestion_task >> data_validation_task >> data_transformation_task >> model_trainer_task >> model_evaluation_task >> model_pusher_task
+    sync_data_to_s3_task = PythonOperator(
+        task_id="push_data_to_s3",
+        python_callable=push_data_to_s3
+    )
+
+    data_ingestion_task >> data_validation_task >> data_transformation_task >> model_trainer_task >> model_evaluation_task >> model_pusher_task >> sync_data_to_s3_task
  
 
 

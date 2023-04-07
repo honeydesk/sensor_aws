@@ -2,6 +2,7 @@ import pymongo
 import pandas as pd
 import json
 from dataclasses import dataclass
+from datetime import datetime
 # Provide the mongodb localhost url to connect python to mongodb.
 import os
 
@@ -12,7 +13,7 @@ class EnvironmentVariable:
     aws_access_secret_key:str = os.getenv("AWS_SECRET_ACCESS_KEY")
 
 
-
+TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 env_var = EnvironmentVariable()

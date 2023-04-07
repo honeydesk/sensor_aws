@@ -7,6 +7,7 @@ import yaml
 import numpy as np
 import dill
 
+
 def get_collection_as_dataframe(database_name:str,collection_name:str)->pd.DataFrame:
     """
     Description: This function return collection as dataframe
@@ -94,3 +95,9 @@ def load_numpy_array_data(file_path: str) -> np.array:
             return np.load(file_obj)
     except Exception as e:
         raise SensorException(e, sys) from e
+    
+
+def clean_dir(file: str):
+    # input_file = os.listdir(dir)
+    os.remove(file)
+    
