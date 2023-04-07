@@ -1,11 +1,20 @@
+# use of this file: There are some files which I donot want to be tracked. Place these extensions here
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+artifact
+data
+saved_models
 
 # C extensions
 *.so
-
+prediction
+saved_models
+demotest.py
+logs
+artifacts
+raw_data
 # Distribution / packaging
 .Python
 build/
